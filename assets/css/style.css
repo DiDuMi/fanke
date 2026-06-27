@@ -178,7 +178,16 @@ body::before {
   font-weight: 400;
 }
 
-/* ==== Article Content ==== */
+article a {
+  color: var(--ink-light);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(139,115,85,0.25);
+  transition: color 0.2s, border-color 0.2s;
+}
+article a:hover {
+  color: var(--ink-heavy);
+  border-bottom-color: var(--ink-fade);
+}
 article {
   padding: 0 0 80px;
   position: relative;
