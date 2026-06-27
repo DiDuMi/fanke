@@ -1,0 +1,501 @@
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   泛客 — 水墨画风格
+   Ink Wash Painting Style
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* ==== CSS Variables ==== */
+:root {
+  /* Ink palette */
+  --ink: #1a1a1a;
+  --ink-heavy: #0d0d0d;
+  --ink-light: #3a3a3a;
+  --ink-fade: #5c5c5c;
+  --ink-wash: #8a8a8a;
+
+  /* Paper tones */
+  --paper: #f5f0e8;
+  --paper-warm: #ede4d3;
+  --paper-dark: #e0d8c8;
+  --paper-light: #faf7f0;
+
+  /* Accent — cinnabar seal red */
+  --seal: #c43a31;
+  --seal-dark: #9a2822;
+  --seal-fade: rgba(196, 58, 49, 0.12);
+
+  /* Gold accent (subtle) */
+  --gold: #8b7355;
+  --gold-light: #a89880;
+
+  /* Typography */
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "Songti SC", "KaiTi", "楷体", serif;
+  --font-display: "Ma Shan Zheng", "ZCOOL XiaoWei", "Noto Serif SC", "STKaiti", "KaiTi", "楷体", serif;
+
+  /* Layout */
+  --max-width: 720px;
+  --content-padding: clamp(20px, 5vw, 48px);
+  --radius: 4px;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* ==== Reset & Base ==== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 20px;
+  font-size: 17px;
+}
+
+body {
+  font-family: var(--font-serif);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ── Paper Texture Background ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background:
+    /* Fiber texture */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 115, 85, 0.03) 2px,
+      rgba(139, 115, 85, 0.03) 3px
+    ),
+    /* Subtle grain via radial noise simulation */
+    radial-gradient(ellipse at 20% 50%, rgba(139,115,85,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139,115,85,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(139,115,85,0.04) 0%, transparent 50%);
+}
+
+/* ── Ink Wash Background Clouds ── */
+.ink-clouds {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.06;
+}
+.ink-cloud {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ink) 0%, transparent 70%);
+  filter: blur(40px);
+}
+.ink-cloud:nth-child(1) { width: 400px; height: 200px; top: 5%; left: -5%; animation: inkDrift 20s ease-in-out infinite; }
+.ink-cloud:nth-child(2) { width: 300px; height: 350px; top: 30%; right: -8%; animation: inkDrift 25s ease-in-out infinite reverse; }
+.ink-cloud:nth-child(3) { width: 500px; height: 180px; bottom: 10%; left: 10%; animation: inkDrift 30s ease-in-out infinite; }
+.ink-cloud:nth-child(4) { width: 250px; height: 280px; top: 60%; right: 15%; animation: inkDrift 22s ease-in-out infinite reverse; }
+.ink-cloud:nth-child(5) { width: 350px; height: 150px; top: 45%; left: 30%; animation: inkDrift 28s ease-in-out infinite; }
+
+@keyframes inkDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(20px, -15px) scale(1.05); }
+  50% { transform: translate(-10px, 10px) scale(0.95); }
+  75% { transform: translate(15px, -5px) scale(1.02); }
+}
+
+/* ==== Container ==== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding);
+  position: relative;
+  z-index: 1;
+}
+
+/* ==== Hero / Header ==== */
+.hero {
+  padding: 80px 0 60px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.hero::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ink-fade), transparent);
+  margin: 40px auto 0;
+}
+
+/* ── Brush Stroke Decorative Line ── */
+.brush-line {
+  display: block;
+  width: 120px;
+  height: 8px;
+  margin: 24px auto;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 10% 50%, var(--ink) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 40%, var(--ink-fade) 0%, transparent 70%),
+    radial-gradient(ellipse at 90% 60%, var(--ink-light) 0%, transparent 50%);
+  border-radius: 4px;
+  opacity: 0.4;
+}
+.brush-line::after {
+  content: '';
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  top: 50%;
+  height: 1px;
+  background:
+    linear-gradient(90deg, transparent, rgba(26,26,26,0.08) 30%, rgba(26,26,26,0.08) 70%, transparent);
+  transform: translateY(-50%);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 400;
+  color: var(--ink-heavy);
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+.hero .subtitle {
+  font-size: 1rem;
+  color: var(--ink-fade);
+  letter-spacing: 0.12em;
+  font-weight: 400;
+}
+
+/* ==== Article Content ==== */
+article {
+  padding: 0 0 80px;
+  position: relative;
+  z-index: 1;
+}
+
+article h2 {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 400;
+  color: var(--ink-heavy);
+  margin: 56px 0 20px;
+  letter-spacing: 0.04em;
+  position: relative;
+  padding-left: 20px;
+  border-left: 3px solid var(--ink-light);
+}
+article h2.first-h2 {
+  margin-top: 0;
+}
+
+article h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--ink-light);
+  margin: 36px 0 16px;
+  letter-spacing: 0.03em;
+}
+
+article p {
+  margin: 0 0 20px;
+  text-indent: 2em;
+  font-size: 1.02rem;
+  color: var(--ink);
+  text-align: justify;
+}
+article p.no-indent {
+  text-indent: 0;
+}
+
+/* ── Strong emphasis ── */
+article strong {
+  color: var(--ink-heavy);
+  font-weight: 700;
+}
+
+/* ── Blockquote (quoted sections) ── */
+article blockquote {
+  margin: 28px 0;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(139,115,85,0.04), rgba(26,26,26,0.02));
+  border: 1px solid rgba(139, 115, 85, 0.12);
+  border-radius: var(--radius);
+  position: relative;
+  font-style: italic;
+  color: var(--ink-light);
+}
+article blockquote::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--ink-fade), transparent);
+  border-radius: 2px 0 0 2px;
+}
+article blockquote p {
+  text-indent: 0;
+  margin: 0;
+}
+
+/* ── List styles ── */
+article ul {
+  list-style: none;
+  margin: 16px 0 24px;
+  padding-left: 0;
+}
+article ul li {
+  position: relative;
+  padding: 6px 0 6px 28px;
+  margin-bottom: 4px;
+  color: var(--ink);
+  line-height: 1.8;
+}
+article ul li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 15px;
+  width: 6px;
+  height: 6px;
+  background: var(--ink-fade);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* Numbered list */
+article ol {
+  margin: 20px 0 28px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: step;
+}
+article ol li {
+  counter-increment: step;
+  position: relative;
+  padding: 10px 0 10px 40px;
+  margin-bottom: 8px;
+}
+article ol li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ink-light), var(--ink));
+  color: var(--paper);
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+}
+
+/* ── Scene / Act markers ── */
+.scene-marker {
+  text-align: center;
+  margin: 48px 0 32px;
+  color: var(--ink-fade);
+  font-size: 0.88rem;
+  letter-spacing: 0.2em;
+  position: relative;
+}
+.scene-marker::before,
+.scene-marker::after {
+  content: '◇';
+  margin: 0 12px;
+  font-size: 0.6rem;
+  opacity: 0.4;
+  vertical-align: middle;
+}
+
+/* ── Divider ── */
+.ink-divider {
+  text-align: center;
+  margin: 40px 0;
+  color: var(--ink-wash);
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  opacity: 0.4;
+}
+
+/* ── Seal Stamp (印章) ── */
+.seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 60px auto 0;
+  text-align: center;
+}
+.seal-stamp {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border: 3px solid var(--seal);
+  border-radius: 2px;
+  color: var(--seal);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  position: relative;
+  opacity: 0.85;
+  transform: rotate(-3deg);
+  transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);
+}
+.seal-stamp:hover {
+  transform: rotate(0deg);
+  opacity: 1;
+}
+.seal-stamp::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--seal);
+  opacity: 0.4;
+  border-radius: 1px;
+}
+
+/* ── Article footer ── */
+.article-footer {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(139,115,85,0.12);
+  color: var(--ink-wash);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+/* ==== Ink Splatter Decoration ==== */
+.ink-splatter {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.04;
+}
+.ink-splatter::before {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, var(--ink) 0%, transparent 70%);
+  border-radius: 40% 60% 55% 45% / 45% 55% 45% 55%;
+  filter: blur(3px);
+}
+
+/* ==== Scroll Progress Bar (Ink style) ==== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  z-index: 999;
+  background: linear-gradient(90deg, var(--ink-wash), var(--ink-light));
+  transform-origin: left;
+  transform: scaleX(0);
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ==== Back to Top ==== */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 24px;
+  z-index: 99;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--paper-dark);
+  border: 1px solid rgba(139,115,85,0.15);
+  color: var(--ink-fade);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease), background 0.25s;
+  font-size: 1.1rem;
+}
+.back-to-top.visible {
+  opacity: 0.7;
+  transform: translateY(0);
+}
+.back-to-top:hover {
+  background: var(--paper);
+  border-color: rgba(139,115,85,0.25);
+  opacity: 1;
+  color: var(--ink-light);
+}
+
+/* ==== Ink Bleed Reveal Animation ==== */
+.ink-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.ink-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==== Reduced Motion ==== */
+@media (prefers-reduced-motion: reduce) {
+  .ink-cloud { animation: none; }
+  .ink-reveal { transition: none; opacity: 1; transform: none; }
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 768px) {
+  html { font-size: 16px; }
+  .hero { padding: 48px 0 40px; }
+  .hero h1 { font-size: 1.6rem; letter-spacing: 0.06em; }
+  article h2 { font-size: 1.3rem; margin: 40px 0 16px; padding-left: 14px; }
+  article h3 { font-size: 1.08rem; }
+  article p { text-indent: 1.5em; }
+  .seal-stamp { width: 72px; height: 72px; font-size: 0.95rem; }
+  article ol li { padding-left: 34px; }
+  article ol li::before { width: 24px; height: 24px; font-size: 0.7rem; }
+  .back-to-top { bottom: 20px; right: 16px; width: 36px; height: 36px; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 15px; }
+  .container { padding: 0 16px; }
+  .hero { padding: 36px 0 32px; }
+  .hero h1 { font-size: 1.4rem; }
+  .hero .subtitle { font-size: 0.85rem; }
+  article h2 { font-size: 1.15rem; }
+  .scene-marker { margin: 36px 0 24px; font-size: 0.78rem; }
+  .seal { margin-top: 40px; }
+}
+
+/* ==== Print ==== */
+@media print {
+  body::before, .ink-clouds, .ink-splatter, .scroll-progress, .back-to-top { display: none; }
+  body { background: #fff; color: #000; font-size: 12pt; }
+  article h2 { color: #000; }
+}
